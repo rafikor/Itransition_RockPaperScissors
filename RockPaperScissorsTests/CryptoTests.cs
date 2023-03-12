@@ -17,7 +17,7 @@ namespace RockPaperScissors.Tests
         public void GenerateKeyLengthTest()
         {
             Crypto hmacGenerator=new ();
-            Assert.AreEqual(hmacGenerator.Key.Length, hmacGenerator.KeyLength,message:"Key must have length equal to the specified");
+            Assert.AreEqual(hmacGenerator.KeyLength, hmacGenerator.Key.Length,message:"Key must have length equal to the specified");
         }
 
         [TestMethod()]
@@ -39,7 +39,7 @@ namespace RockPaperScissors.Tests
             string message = "Rock";
             byte[] hmac=hmacGenerator.GenerateHMAC(message);
             string hmacStringHex = Convert.ToHexString(hmac).ToLower();
-            Assert.AreEqual(hmacStringHex, "38ffb3e657e52a6d0bcb5b2c42feef57388862e67276ba400bcd77c47fb72a01", "Calculated HMAC with fixed key must coincide with computation according to standard implementation https://dinochiesa.github.io/hmachash/index.html");
+            Assert.AreEqual("38ffb3e657e52a6d0bcb5b2c42feef57388862e67276ba400bcd77c47fb72a01", hmacStringHex, "Calculated HMAC with fixed key must coincide with computation according to standard implementation https://dinochiesa.github.io/hmachash/index.html");
         }
     }
 }
