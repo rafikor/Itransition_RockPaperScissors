@@ -31,7 +31,8 @@ namespace RockPaperScissors
             }
         }
         private int keyLength;
-        public byte[] Key { get; private set; }
+
+        public byte[] Key { get; set; }
         public Crypto()
         {
             KeyLength = 256 / 8;//256 bits by default
