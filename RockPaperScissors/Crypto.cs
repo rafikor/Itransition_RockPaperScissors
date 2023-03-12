@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 
 namespace RockPaperScissors
 {   
@@ -43,7 +44,13 @@ namespace RockPaperScissors
             Key=RandomNumberGenerator.GetBytes(KeyLength);
             return Key; 
         }
-        //TODO:implement
-        public uint GenerateHMAC(int move) { return 0; }
+        
+        public byte[] GenerateHMAC(string move) 
+        {
+            var HMACprovider = new HMACSHA256(Key);
+            byte[] moveAsBytes = move.ToByteArray();
+            byte[] resultHMAC = HMACprovider.ComputeHash(moveAsBytes);
+            return resultHMAC;
+        }
     }
 }
