@@ -15,7 +15,7 @@ namespace RockPaperScissors.Tests
         public void GenerateKeyLengthTest()
         {
             Crypto mock=new ();
-            Assert.AreEqual(mock.Key.Length, Crypto.keylength,message:"Key must have length equal to the specified");
+            Assert.AreEqual(mock.Key.Length, mock.KeyLength,message:"Key must have length equal to the specified");
         }
 
         [TestMethod()]
