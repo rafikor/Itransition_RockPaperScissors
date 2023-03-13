@@ -56,6 +56,8 @@ namespace RockPaperScissors
                         Console.WriteLine(winnerText);
                         Console.WriteLine(hmacKeyLabelString + gameProcessor.GetKeyHexSting());
                         Console.WriteLine(checkHMACUrl);
+                        Console.WriteLine("Press any key to continue");
+                        var notUsed = Console.ReadKey(true);
                         Console.WriteLine("---------------------------------------------------------------------\n");
 
                         gameProcessor.InitNewGame();
