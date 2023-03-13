@@ -30,7 +30,7 @@ namespace RockPaperScissors
 
         private void InitNewGame()
         {
-
+            gameProcessor.InitNewGame();
             HMACLabel.Text = gameProcessor.GetHMACHexString();
 
             keyLabel.Text = "";
