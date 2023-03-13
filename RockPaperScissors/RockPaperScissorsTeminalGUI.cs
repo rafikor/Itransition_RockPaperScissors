@@ -12,26 +12,25 @@ using Terminal.Gui;
 
 namespace RockPaperScissors
 {
-    public class RockPaperScissorsUI
+    public class RockPaperScissorsTeminalGUI : RockPaperScissorsBaseUI
     {
-        RockPaperScissorsProcessor gameProcessor = new RockPaperScissorsProcessor();
 
-        private Label HMACLabel = new Label();
-        private Label usernameLabel = new Label("Select your choise: ");
+        private Label HMACLabel = new Label(hmacLabelString);
+        private Label selectPromptLabel = new Label(selectUserString);
         private ustring[] listOptsLabels = new ustring[1];
         private Button btnProcessResults = new Button("I made my choise");
         private Button btnNewGame = new Button("New game");
         private Label playerMoveTextLabel = new Label();
         private Label computerMoveTextLabel = new Label();
         private Label winnerLabel = new Label();
-        private Label helpLinkToCheckLabel = new Label("You can check HMAC here: https://dinochiesa.github.io/hmachash/index.html. Selection of the text at screen is performed by the mouse when shift is held");
-        private Label keyLabel = new Label();
+        private Label helpLinkToCheckLabel = new Label(checkHMACUrl);
+        private Label keyLabel = new Label(hmacKeyLabelString);
         private RadioGroup radOptions = new RadioGroup();
 
         private void InitNewGame()
         {
             gameProcessor.InitNewGame();
-            HMACLabel.Text = gameProcessor.GetHMACHexString();
+            HMACLabel.Text = hmacLabelString + gameProcessor.GetHMACHexString();
 
             keyLabel.Text = "";
             winnerLabel.Text = "";
@@ -49,16 +48,11 @@ namespace RockPaperScissors
             if (radOptions.SelectedItem > -1 && radOptions.SelectedItem < gameProcessor.options.Length)
             {
                 int userMove = radOptions.SelectedItem;
-                playerMoveTextLabel.Text = "Your move is:" + gameProcessor.options[userMove];
+                playerMoveTextLabel.Text = yourMoveString + gameProcessor.options[userMove];
 
                 Winner winner = gameProcessor.ProcessResults(userMove);
 
-                winnerText = winner switch
-                {
-                    Winner.FirstPlayerWin => "You lose!",
-                    Winner.SecondPlayerWin => "You win!",
-                    _ => "Draw!"
-                };
+                winnerText = GetWinnerString(winner);
             }
             else
             {
@@ -75,12 +69,12 @@ namespace RockPaperScissors
                     }
                     else
                     {
-                        winnerText = "Incorrect selection of move!";
+                        winnerText = incorrectInputString;
                     }
                 }
             }
-            keyLabel.Text = gameProcessor.GetKeyHexSting();
-            computerMoveTextLabel.Text = "Computer move is: " + gameProcessor.options[gameProcessor.ComputerMove];
+            keyLabel.Text = hmacKeyLabelString + gameProcessor.GetKeyHexSting();
+            computerMoveTextLabel.Text = computerMoveString + gameProcessor.options[gameProcessor.ComputerMove];
 
             winnerLabel.Text = winnerText;
             btnProcessResults.IsDefault = false;
@@ -88,46 +82,14 @@ namespace RockPaperScissors
             btnNewGame.IsDefault = true;
         }
 
-        private void ShowHelpTable()
-        {
-            var dialog = new Dialog("Help");
-
-            var helpDialogLabel = new Label();
-            helpDialogLabel.Text = "Values in cells give result for the player with moves specified in the head of the table";
-
-            DataTable dataTable = TableWinLoseGenerator.GenerateTableWinLose(gameProcessor.options);
-
-            TableView table = new TableView();
-            table = new TableView()
-            {
-                X = 0,
-                Y = Pos.Bottom(helpDialogLabel),
-                Width = Dim.Fill(),
-                Height = 18,
-            };
-
-            table.Table = dataTable;
-            dialog.Add(helpDialogLabel);
-            dialog.Add(table);
-
-
-            var ok = new Button(3, 20, "Ok");
-            ok.Clicked += () => { Application.RequestStop(); };
-            ok.X = 2;
-            ok.Y = Pos.Bottom(table) + 60;
-
-            dialog.Add(ok);
-            Application.Run(dialog);
-        }
-
-        public void Run(string[] _options)
+        public override void Run(string[] _options)
         {
             gameProcessor.options = _options;
 
             Application.Init();
 
-            HMACLabel.Text = "";
-            usernameLabel.Y = Pos.Bottom(HMACLabel);
+            HMACLabel.Text = hmacLabelString;
+            selectPromptLabel.Y = Pos.Bottom(HMACLabel);
 
             listOptsLabels = new ustring[gameProcessor.options.Length + 2];
             for (int optIndex = 0; optIndex < gameProcessor.options.Length; optIndex++)
@@ -146,7 +108,7 @@ namespace RockPaperScissors
 
             radOptions = new RadioGroup(listOptsLabels)
             {
-                Y = Pos.Bottom(usernameLabel)
+                Y = Pos.Bottom(selectPromptLabel)
             };
 
             btnProcessResults.Y = Pos.Bottom(radOptions) + 1;
@@ -169,7 +131,7 @@ namespace RockPaperScissors
 
             btnNewGame.Clicked += InitNewGame;
 
-            Application.Top.Add(HMACLabel, usernameLabel, radOptions, btnProcessResults, btnNewGame, playerMoveTextLabel, computerMoveTextLabel, winnerLabel, keyLabel, helpLinkToCheckLabel);
+            Application.Top.Add(HMACLabel, selectPromptLabel, radOptions, btnProcessResults, btnNewGame, playerMoveTextLabel, computerMoveTextLabel, winnerLabel, keyLabel, helpLinkToCheckLabel);
             InitNewGame();
             Application.Run();
             Application.Shutdown();

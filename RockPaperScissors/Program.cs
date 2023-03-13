@@ -10,7 +10,15 @@ namespace RockPaperScissors
         {
             if (args.Length > 2 && args.Length % 2 == 1)
             {
-                RockPaperScissorsUI gameApp = new();
+                RockPaperScissorsBaseUI gameApp;
+                if (args.Length <= 15)
+                {
+                    gameApp = new RockPaperScissorsTeminalGUI();
+                }
+                else 
+                {
+                    gameApp = new RockPaperScissorsDefaultUI();
+                }
                 gameApp.Run(args);
             }
             else
