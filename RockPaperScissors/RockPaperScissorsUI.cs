@@ -62,40 +62,15 @@ namespace RockPaperScissors
             }
             else
             {
-                if (radOptions.SelectedItem == gameProcessor.options.Length)
+                if (radOptions.SelectedItem == gameProcessor.options.Length)//exit
                 {
                     Application.RequestStop();
                 }
                 else
                 {
-                    if (radOptions.SelectedItem == gameProcessor.options.Length + 1)
+                    if (radOptions.SelectedItem == gameProcessor.options.Length + 1)//help
                     {
-                        var dialog = new Dialog("Help");
-
-                        var helpDialogLabel = new Label();
-                        helpDialogLabel.Text = "Values in cells give result for the player with moves specified in head of table";
-
-                        DataTable dataTable = TableWinLoseGenerator.GenerateTableWinLose(gameProcessor.options);
-
-                        TableView table = new TableView();
-                        table = new TableView()
-                        {
-                            X = 0,
-                            Y = Pos.Bottom(helpDialogLabel),
-                            Width = Dim.Fill(),
-                            Height = Dim.Fill(),
-                        };
-                        table.Table = dataTable;
-
-                        dialog.Add(helpDialogLabel);
-                        dialog.Add(table);
-
-                        var ok = new Button(3, 14, "Ok");
-                        ok.Clicked += () => { Application.RequestStop(); };
-                        ok.Y = Pos.Bottom(table);
-
-                        dialog.Add(ok);
-                        Application.Run(dialog);
+                        ShowHelpTable();
                         return;
                     }
                     else
@@ -111,6 +86,38 @@ namespace RockPaperScissors
             btnProcessResults.IsDefault = false;
             btnProcessResults.Enabled = false;
             btnNewGame.IsDefault = true;
+        }
+
+        private void ShowHelpTable()
+        {
+            var dialog = new Dialog("Help");
+
+            var helpDialogLabel = new Label();
+            helpDialogLabel.Text = "Values in cells give result for the player with moves specified in the head of the table";
+
+            DataTable dataTable = TableWinLoseGenerator.GenerateTableWinLose(gameProcessor.options);
+
+            TableView table = new TableView();
+            table = new TableView()
+            {
+                X = 0,
+                Y = Pos.Bottom(helpDialogLabel),
+                Width = Dim.Fill(),
+                Height = 18,
+            };
+
+            table.Table = dataTable;
+            dialog.Add(helpDialogLabel);
+            dialog.Add(table);
+
+
+            var ok = new Button(3, 20, "Ok");
+            ok.Clicked += () => { Application.RequestStop(); };
+            ok.X = 2;
+            ok.Y = Pos.Bottom(table) + 60;
+
+            dialog.Add(ok);
+            Application.Run(dialog);
         }
 
         public void Run(string[] _options)
