@@ -14,17 +14,7 @@ namespace RockPaperScissors
 {
     public class GameClass
     {
-        public void GameProcess(string userMove, int optionsCount)
-        {
-            int computerMove = RandomNumberGenerator.GetInt32(0, optionsCount + 1);
-
-            byte[] hmac = crypto.GenerateHMAC(userMove);
-            Console.WriteLine(Convert.ToHexString(hmac));
-        }
-
-
-        private Crypto crypto = new Crypto();
-        private string[] options = { "Rock", "Paper", "Scissors" };
+        RockPaperScissorsProcessor gameProcessor = new RockPaperScissorsProcessor();
 
         private Label HMACLabel = new Label();
         private Label usernameLabel = new Label("Select your choise: ");
@@ -38,13 +28,10 @@ namespace RockPaperScissors
         private Label keyLabel = new Label();
         private RadioGroup radOptions = new RadioGroup();
 
-        private int computerMove = -1;
-        private int userMove = -1;
         private void InitNewGame()
         {
-            crypto.GenerateKey();
-            computerMove = RandomNumberGenerator.GetInt32(0, options.Length);
-            HMACLabel.Text = Convert.ToHexString(crypto.GenerateHMAC(options[computerMove]));
+
+            HMACLabel.Text = gameProcessor.GetHMACHexString();
 
             keyLabel.Text = "";
             winnerLabel.Text = "";
@@ -59,12 +46,13 @@ namespace RockPaperScissors
         private void processResults()
         {
             string winnerText = "";
-            if (radOptions.SelectedItem > -1 && radOptions.SelectedItem < options.Length)
+            if (radOptions.SelectedItem > -1 && radOptions.SelectedItem < gameProcessor.options.Length)
             {
-                userMove = radOptions.SelectedItem;
-                playerMoveTextLabel.Text = "Your move is:" + options[userMove];
+                int userMove = radOptions.SelectedItem;
+                playerMoveTextLabel.Text = "Your move is:" + gameProcessor.options[userMove];
 
-                Winner winner = Rules.DetermineNumberOfWinner(computerMove, userMove, options.Length);
+                Winner winner = gameProcessor.ProcessResults(userMove);
+
                 winnerText = winner switch
                 {
                     Winner.FirstPlayerWin => "You lose!",
@@ -74,20 +62,20 @@ namespace RockPaperScissors
             }
             else
             {
-                if (radOptions.SelectedItem == options.Length)
+                if (radOptions.SelectedItem == gameProcessor.options.Length)
                 {
                     Application.RequestStop();
                 }
                 else
                 {
-                    if (radOptions.SelectedItem == options.Length + 1)
+                    if (radOptions.SelectedItem == gameProcessor.options.Length + 1)
                     {
                         var dialog = new Dialog("Help");
 
                         var helpDialogLabel = new Label();
                         helpDialogLabel.Text = "Values in cells give result for the player with moves specified in head of table";
 
-                        DataTable dataTable = TableWinLoseGenerator.GenerateTableWinLose(options);
+                        DataTable dataTable = TableWinLoseGenerator.GenerateTableWinLose(gameProcessor.options);
 
                         TableView table = new TableView();
                         table = new TableView()
@@ -116,8 +104,8 @@ namespace RockPaperScissors
                     }
                 }
             }
-            keyLabel.Text = Convert.ToHexString(crypto.Key);
-            computerMoveTextLabel.Text = "Computer move is: " + options[computerMove];
+            keyLabel.Text = gameProcessor.GetKeyHexSting();
+            computerMoveTextLabel.Text = "Computer move is: " + gameProcessor.options[gameProcessor.ComputerMove];
 
             winnerLabel.Text = winnerText;
             btnProcessResults.IsDefault = false;
@@ -125,17 +113,17 @@ namespace RockPaperScissors
             btnNewGame.IsDefault = true;
         }
 
-public void Run(string[] _options)
+        public void Run(string[] _options)
         {
-            options = _options;
+            gameProcessor.options = _options;
 
             Application.Init();
 
             HMACLabel.Text = "";
             usernameLabel.Y = Pos.Bottom(HMACLabel);
 
-            listOptsLabels = new ustring[options.Length + 2];
-            for (int optIndex = 0; optIndex < options.Length; optIndex++)
+            listOptsLabels = new ustring[gameProcessor.options.Length + 2];
+            for (int optIndex = 0; optIndex < gameProcessor.options.Length; optIndex++)
             {
                 string numberStr = (optIndex + 1).ToString();
                 if (optIndex < 9)
@@ -143,11 +131,11 @@ public void Run(string[] _options)
                     numberStr = "_" + numberStr;//_ marks for hotkeys
                 }
 
-                string optionText = numberStr + " - " + options[optIndex];
+                string optionText = numberStr + " - " + gameProcessor.options[optIndex];
                 listOptsLabels[optIndex] = optionText;
             }
-            listOptsLabels[options.Length] = "_0 - exit";
-            listOptsLabels[options.Length+1] = "_h - help";
+            listOptsLabels[gameProcessor.options.Length] = "_0 - exit";
+            listOptsLabels[gameProcessor.options.Length + 1] = "_h - help";
 
             radOptions = new RadioGroup(listOptsLabels)
             {
