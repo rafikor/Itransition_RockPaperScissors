@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 using Core;
 
 namespace RockPaperScissors
 {   
+    /// <summary>
+    /// Class to work with cryptography in the implementation of the Rock-Paper-Scissors game
+    /// </summary>
     public class Crypto
     {
         /// <summary>
@@ -28,7 +26,6 @@ namespace RockPaperScissors
                     keyLength = value;
                     GenerateKey();
                 }
-                //else TODO: throw exception?
             }
         }
         private int keyLength;
@@ -41,7 +38,7 @@ namespace RockPaperScissors
         }
         public byte[] GenerateKey() 
         {
-            Key=RandomNumberGenerator.GetBytes(KeyLength);
+            Key = RandomNumberGenerator.GetBytes(KeyLength);
             return Key; 
         }
         

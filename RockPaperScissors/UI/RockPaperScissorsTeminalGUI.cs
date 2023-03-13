@@ -1,12 +1,4 @@
 ﻿using NStack;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using Terminal.Gui;
 
 namespace RockPaperScissors.UI
@@ -14,6 +6,7 @@ namespace RockPaperScissors.UI
     public class RockPaperScissorsTeminalGUI : RockPaperScissorsBaseUI
     {
 
+        //UI elements for Terminal.Gui
         private Label HMACLabel = new Label(hmacLabelString);
         private Label selectPromptLabel = new Label(selectUserString);
         private ustring[] listOptsLabels = new ustring[1];
@@ -31,6 +24,7 @@ namespace RockPaperScissors.UI
             gameProcessor.InitNewGame();
             HMACLabel.Text = hmacLabelString + gameProcessor.GetHMACHexString();
 
+            //clear labels with information from previous game, hide some elements
             keyLabel.Text = "";
             winnerLabel.Text = "";
             computerMoveTextLabel.Text = "";
@@ -39,9 +33,13 @@ namespace RockPaperScissors.UI
             btnProcessResults.Enabled = true;
             btnNewGame.IsDefault = false;
             helpLinkToCheckLabel.Visible = false;
-            radOptions.SetFocus();
+
+            radOptions.SetFocus();//keyboard focus must be at radiobutton control to enable hotkeys for the user immediately
         }
 
+        /// <summary>
+        /// Update of UI after user move
+        /// </summary>
         private void processResults()
         {
             string winnerText = "";
@@ -50,13 +48,13 @@ namespace RockPaperScissors.UI
                 int userMove = radOptions.SelectedItem;
                 playerMoveTextLabel.Text = yourMoveString + gameProcessor.options[userMove];
 
-                Winner winner = gameProcessor.ProcessResults(userMove);
+                Winner winner = gameProcessor.DetermineWinner(userMove);
 
                 winnerText = GetWinnerString(winner);
             }
             else
             {
-                if (radOptions.SelectedItem == gameProcessor.options.Length)//exit
+                if (radOptions.SelectedItem == gameProcessor.options.Length)//exit (item "0 - exit" is located after usual options)
                 {
                     Application.RequestStop();
                 }
@@ -67,7 +65,7 @@ namespace RockPaperScissors.UI
                         ShowHelpTable();
                         return;
                     }
-                    else
+                    else // can't happen, but it is better to reinsure
                     {
                         winnerText = incorrectInputString;
                     }
@@ -75,8 +73,9 @@ namespace RockPaperScissors.UI
             }
             keyLabel.Text = hmacKeyLabelString + gameProcessor.GetKeyHexSting();
             computerMoveTextLabel.Text = computerMoveString + gameProcessor.options[gameProcessor.ComputerMove];
-
             winnerLabel.Text = winnerText;
+
+            //Change default button (the button which is activated by pressing enter by default), change visibility
             helpLinkToCheckLabel.Visible = true;
             btnProcessResults.IsDefault = false;
             btnProcessResults.Enabled = false;
@@ -98,7 +97,7 @@ namespace RockPaperScissors.UI
                 string numberStr = (optIndex + 1).ToString();
                 if (optIndex < 9)
                 {
-                    numberStr = "_" + numberStr;//_ marks for hotkeys
+                    numberStr = "_" + numberStr;//"_" symbol is mark for hotkeys in Terminal.Gui
                 }
 
                 string optionText = numberStr + " - " + gameProcessor.options[optIndex];
@@ -134,6 +133,7 @@ namespace RockPaperScissors.UI
 
             Application.Top.Add(HMACLabel, selectPromptLabel, radOptions, btnProcessResults, btnNewGame, playerMoveTextLabel, computerMoveTextLabel, winnerLabel, keyLabel, helpLinkToCheckLabel);
             InitNewGame();
+
             Application.Run();
             Application.Shutdown();
         }

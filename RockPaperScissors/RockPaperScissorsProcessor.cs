@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 
 namespace RockPaperScissors
 {
@@ -14,6 +9,9 @@ namespace RockPaperScissors
         public int ComputerMove { get; private set; }
         private int userMove = -1;
 
+        /// <summary>
+        /// Updates private key and calculates move of the computer
+        /// </summary>
         public void InitNewGame()
         {
             crypto.GenerateKey();
@@ -30,7 +28,7 @@ namespace RockPaperScissors
             return Convert.ToHexString(crypto.Key);
         }
 
-        public Winner ProcessResults(int userMoveExt)
+        public Winner DetermineWinner(int userMoveExt)
         {
             userMove = userMoveExt;
             Winner winner = Rules.DetermineNumberOfWinner(ComputerMove, userMove, options.Length);

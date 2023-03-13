@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RockPaperScissors
+﻿namespace RockPaperScissors
 {
     public enum Winner { FirstPlayerWin, SecondPlayerWin, Draw };
+
     public static class Rules
     {
         /// <summary>
         /// Method determines who is winner based on numbers of players' moves and total number of options for moves
-        /// All numbers counted from zero (i.e. method can return 0 when the first player wins and 1 when the second player wins)
-        /// In case of draw, -1 is returned
         /// </summary>
         /// <param name="moveFirstPlayer">counted from zero</param>
         /// <param name="moveSecondPlayer">counted from zero</param>

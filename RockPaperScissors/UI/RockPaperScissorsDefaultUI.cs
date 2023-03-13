@@ -1,20 +1,10 @@
-﻿using Core.Measurement;
-using NStack;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 
 namespace RockPaperScissors.UI
 {
     public class RockPaperScissorsDefaultUI : RockPaperScissorsBaseUI
     {
-        private readonly string helpChoiseString = "?";
+        private readonly string helpChoiceString = "?"; //key to start help
         public void displayMenu()
         {
             Console.WriteLine(hmacLabelString + gameProcessor.GetHMACHexString());
@@ -24,7 +14,7 @@ namespace RockPaperScissors.UI
                 Console.WriteLine($"{move + 1} - {gameProcessor.options[move]}");
             }
             Console.WriteLine("0 - exit");
-            Console.WriteLine(helpChoiseString + " - help");
+            Console.WriteLine(helpChoiceString + " - help");
             Console.Write("Enter your move: ");
         }
 
@@ -35,21 +25,23 @@ namespace RockPaperScissors.UI
             while (true)
             {
                 displayMenu();
+
+                //get and process user's input
                 var input = Console.ReadLine();
-                int userChoise;
-                if (int.TryParse(input, out userChoise))
+                int userChoice;
+                if (int.TryParse(input, out userChoice))
                 {
-                    if (userChoise >= 0 && userChoise < gameProcessor.options.Length)//correct input
+                    if (userChoice >= 0 && userChoice < gameProcessor.options.Length)//correct input
                     {
-                        if (userChoise == 0)
+                        if (userChoice == 0)
                         {
                             Console.WriteLine("Exiting application...");
                             return;
                         }
-                        userChoise -= 1;
-                        Console.WriteLine(yourMoveString + gameProcessor.options[userChoise]);
+                        userChoice -= 1; //options in code are numbered starting from 0
+                        Console.WriteLine(yourMoveString + gameProcessor.options[userChoice]);
                         Console.WriteLine(computerMoveString + gameProcessor.options[gameProcessor.ComputerMove]);
-                        Winner winner = gameProcessor.ProcessResults(userChoise);
+                        Winner winner = gameProcessor.DetermineWinner(userChoice);
 
                         string winnerText = GetWinnerString(winner);
 
@@ -60,22 +52,22 @@ namespace RockPaperScissors.UI
                         var notUsed = Console.ReadKey(true);
                         Console.WriteLine("---------------------------------------------------------------------\n");
 
-                        gameProcessor.InitNewGame();
+                        gameProcessor.InitNewGame();//game must restart only after successfull move of the user
                     }
                     else
                     {
                         Console.WriteLine(incorrectInputString);
                     }
                 }
-                else
+                else//input is not number
                 {
-                    if (input == helpChoiseString)
+                    if (input == helpChoiceString)
                     {
                         Application.Init();
                         ShowHelpTable();
                         Application.Shutdown();
                     }
-                    else
+                    else//input is not number and not help key
                     {
                         Console.WriteLine(incorrectInputString);
                     }

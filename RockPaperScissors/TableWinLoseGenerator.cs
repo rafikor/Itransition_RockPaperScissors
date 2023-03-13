@@ -1,15 +1,14 @@
-﻿using NStack;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace RockPaperScissors
 {
     public class TableWinLoseGenerator
     {
+        /// <summary>
+        /// Values in cells are relative to the moves in header of the table (i.e. cell with value "Win" means that move specified in head of given column wins agains move given in first cell of given row)
+        /// </summary>
+        /// <param name="options">names of possible options for moves</param>
+        /// <returns></returns>
         public static DataTable GenerateTableWinLose(string[] options)
         {
             DataTable dataTable = new DataTable("Help");
