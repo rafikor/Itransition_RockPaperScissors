@@ -1,6 +1,23 @@
-﻿// See https://aka.ms/new-console-template for more information
-using RockPaperScissors;
+﻿using RockPaperScissors;
+using System.Security.Cryptography;
 
-Crypto crypto= new ();
-Console.WriteLine(Convert.ToHexString(crypto.Key));
-Console.WriteLine("Hello, World!");
+namespace RockPaperScissors
+{
+    public class Run
+    {
+        
+        static void Main(string[] args)
+        {
+            
+            var options = new List<string>();
+            options.Add("Stone");
+            options.Add("Scissors");
+            options.Add("Paper");
+
+            GameClass gameApp = new();
+            gameApp.Run(options);
+        }
+    }
+
+    
+}
