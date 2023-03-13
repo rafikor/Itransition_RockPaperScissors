@@ -12,7 +12,7 @@ using Terminal.Gui;
 
 namespace RockPaperScissors
 {
-    public class GameClass
+    public class RockPaperScissorsUI
     {
         RockPaperScissorsProcessor gameProcessor = new RockPaperScissorsProcessor();
 

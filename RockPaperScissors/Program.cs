@@ -10,7 +10,7 @@ namespace RockPaperScissors
         {
             if (args.Length > 2 && args.Length % 2 == 1)
             {
-                GameClass gameApp = new();
+                RockPaperScissorsUI gameApp = new();
                 gameApp.Run(args);
             }
             else
