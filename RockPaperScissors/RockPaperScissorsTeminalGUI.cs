@@ -39,6 +39,7 @@ namespace RockPaperScissors
             btnProcessResults.IsDefault = true;
             btnProcessResults.Enabled = true;
             btnNewGame.IsDefault = false;
+            helpLinkToCheckLabel.Visible = false;
             radOptions.SetFocus();
         }
 
@@ -77,6 +78,7 @@ namespace RockPaperScissors
             computerMoveTextLabel.Text = computerMoveString + gameProcessor.options[gameProcessor.ComputerMove];
 
             winnerLabel.Text = winnerText;
+            helpLinkToCheckLabel.Visible = true;
             btnProcessResults.IsDefault = false;
             btnProcessResults.Enabled = false;
             btnNewGame.IsDefault = true;

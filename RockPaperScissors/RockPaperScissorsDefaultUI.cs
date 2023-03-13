@@ -22,7 +22,7 @@ namespace RockPaperScissors
             Console.WriteLine(selectUserString);
             for (int move = 0; move < gameProcessor.options.Length; move++)
             {
-                Console.WriteLine($"{move} - {gameProcessor.options[move]}");
+                Console.WriteLine($"{move+1} - {gameProcessor.options[move]}");
             }
             Console.WriteLine("0 - exit");
             Console.WriteLine(helpChoiseString + " - help");
@@ -47,6 +47,7 @@ namespace RockPaperScissors
                             Console.WriteLine("Exiting application...");
                             return;
                         }
+                        userChoise -= 1;
                         Console.WriteLine(yourMoveString + gameProcessor.options[userChoise]);
                         Console.WriteLine(computerMoveString + gameProcessor.options[gameProcessor.ComputerMove]);
                         Winner winner = gameProcessor.ProcessResults(userChoise);
