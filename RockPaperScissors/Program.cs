@@ -8,14 +8,16 @@ namespace RockPaperScissors
         
         static void Main(string[] args)
         {
-            
-            var options = new List<string>();
-            options.Add("Stone");
-            options.Add("Scissors");
-            options.Add("Paper");
-
-            GameClass gameApp = new();
-            gameApp.Run(options);
+            if (args.Length > 2 && args.Length % 2 == 1)
+            {
+                GameClass gameApp = new();
+                gameApp.Run(args);
+            }
+            else
+            {
+                //TODO
+                Console.WriteLine("Wrong options!");
+            }
         }
     }
 
