@@ -23,22 +23,22 @@ namespace RockPaperScissors
         }
 
 
-        private Crypto crypto = new();
-        private string[] options;
+        private Crypto crypto = new Crypto();
+        private string[] options = { "Rock", "Paper", "Scissors" };
 
-        private Label HMAC;
+        private Label HMACLabel = new Label();
 
-        private Label usernameLabel;
+        private Label usernameLabel = new Label("Select your choise: ");
 
-        private ustring[] listOpts;
-        private Button btnLogin;
-        private Button btnNewGame;
-        private Label playerMoveText;
-        private Label computerMoveText;
-        private Label winner;
-        private Label helpLinkToCheck;
-        private Label key;
-        private RadioGroup rad;
+        private ustring[] listOpts = new ustring[1];
+        private Button btnLogin = new Button("I made my choise");
+        private Button btnNewGame = new Button("New game");
+        private Label playerMoveText = new Label();
+        private Label computerMoveText = new Label();
+        private Label winner = new Label();
+        private Label helpLinkToCheck = new Label("You can check HMAC here: https://dinochiesa.github.io/hmachash/index.html. Selection of the text at screen is performed by the mouse when shift is held");
+        private Label key = new Label();
+        private RadioGroup rad = new RadioGroup();
 
         private int computerMove = -1;
         private int userMove = -1;
@@ -46,7 +46,7 @@ namespace RockPaperScissors
         {
             crypto.GenerateKey();
             computerMove = RandomNumberGenerator.GetInt32(0, options.Length);
-            HMAC.Text = Convert.ToHexString(crypto.GenerateHMAC(options[computerMove]));
+            HMACLabel.Text = Convert.ToHexString(crypto.GenerateHMAC(options[computerMove]));
 
             key.Text = "";
             winner.Text = "";
@@ -158,17 +158,8 @@ public void Run(string[] _options)
 
             Application.Init();
 
-            HMAC = new Label()
-            {
-                Text = ""
-            };
-
-            // Create input components and labels
-            usernameLabel = new Label()
-            {
-                Text = "Select your choise: ",
-                Y = Pos.Bottom(HMAC)
-            };
+            HMACLabel.Text = "";
+            usernameLabel.Y = Pos.Bottom(HMACLabel);
 
             listOpts = new ustring[options.Length + 2];
             for (int optIndex = 0; optIndex < options.Length; optIndex++)
@@ -190,63 +181,27 @@ public void Run(string[] _options)
                 Y = Pos.Bottom(usernameLabel)
             };
 
+            btnLogin.Y = Pos.Bottom(rad) + 1;
+            btnLogin.IsDefault = true;
 
-            // Create login button
-            btnLogin = new Button()
-            {
-                Text = "I made my choise",
-                Y = Pos.Bottom(rad) + 1,
-                // center the login button horizontally
-                //X = Pos.Center(),
-                IsDefault = true,
-            };
+            btnNewGame.Y = Pos.Bottom(rad) + 1;
+            btnNewGame.X = Pos.Right(btnLogin) + 1;
 
-            // Create login button
-            btnNewGame = new Button()
-            {
-                Text = "New game",
-                Y = Pos.Bottom(rad) + 1,
-                // center the login button horizontally
-                X = Pos.Right(btnLogin) + 1
-            };
+            playerMoveText.Y = Pos.Bottom(btnNewGame) + 1;
 
-            playerMoveText = new Label()
-            {
-                Text = "",
-                Y = Pos.Bottom(btnNewGame) + 1
-            };
+            computerMoveText.Y = Pos.Bottom(playerMoveText) + 1;
 
-            computerMoveText = new Label()
-            {
-                Text = "",
-                Y = Pos.Bottom(playerMoveText) + 1
-            };
+            winner.Y = Pos.Bottom(computerMoveText) + 1;
 
+            key.Y = Pos.Bottom(winner) + 1;
 
-            winner = new Label()
-            {
-                Text = "",
-                Y = Pos.Bottom(computerMoveText) + 1
-            };
-
-            key = new Label()
-            {
-                Text = "",
-                Y = Pos.Bottom(winner) + 1
-            };
-
-            helpLinkToCheck = new Label()
-            {
-                Text = "You can check HMAC here: https://dinochiesa.github.io/hmachash/index.html. Selection of the text at screen is performed by the mouse when shift is held",
-                Y = Pos.Bottom(key) + 1
-            };
+            helpLinkToCheck.Y = Pos.Bottom(key) + 1;
 
             btnLogin.Clicked += processResults;
 
-
             btnNewGame.Clicked += InitNewGame;
 
-            Application.Top.Add(HMAC, usernameLabel, rad, btnLogin, btnNewGame, playerMoveText, computerMoveText, winner, key, helpLinkToCheck);
+            Application.Top.Add(HMACLabel, usernameLabel, rad, btnLogin, btnNewGame, playerMoveText, computerMoveText, winner, key, helpLinkToCheck);
             InitNewGame();
             Application.Run();
             Application.Shutdown();
