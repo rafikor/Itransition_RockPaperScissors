@@ -69,7 +69,7 @@ namespace RockPaperScissors
                 Winner winner = Rules.DetermineNumberOfWinner(computerMove, userMove, options.Length);
                 winnerText = winner switch
                 {
-                    Winner.FirstPlayerWin => "You loose!",
+                    Winner.FirstPlayerWin => "You lose!",
                     Winner.SecondPlayerWin => "You win!",
                     _ => "Draw!"
                 };
@@ -84,44 +84,31 @@ namespace RockPaperScissors
                 {
                     if (rad.SelectedItem == options.Length + 1)
                     {
-
-                        //Help
-                        /*
-
-                        var cancel = new Button(10, 14, "Cancel");
-                        cancel.Clicked += () => Application.RequestStop();
-
-                        var dialog = new Dialog("Login", 60, 18, ok, cancel);
-                        var entry = new TextField()
-                        {
-                            X = 1,
-                            Y = 1,
-                            Width = Dim.Fill(),
-                            Height = 1
-                        };*/
-                        
                         var dialog = new Dialog("Help");
 
-                        DataTable dataTable= new DataTable("Help");
+                        var helpDialogLabel = new Label();
+                        helpDialogLabel.Text = "Values in cells give result for the player with moves specified in head of table";
 
-                        dataTable.Columns.Add(new DataColumn("", typeof(string)));
+                        DataTable dataTable = new DataTable("Help");
+
+                        dataTable.Columns.Add(new DataColumn("Moves", typeof(string)));
 
                         for (int i = 0;i < options.Length;i++)
                         {
                             dataTable.Columns.Add(new DataColumn(options[i], typeof(string)));
                         }
 
-                        for (int i = 0; i < options.Length; i++)
+                        for (int i = 0; i < options.Length; i++)//to the down
                         {
                             object[] row = new object[options.Length+1];
                             row[0] = options[i];
-                            for (int j = 0; j < options.Length; j++)
+                            for (int j = 0; j < options.Length; j++)//to the right
                             {
                                 Winner winner=Rules.DetermineNumberOfWinner(i, j, options.Length);
                                 row[j + 1] = winner switch
                                 {
-                                    Winner.FirstPlayerWin => options[i],
-                                    Winner.SecondPlayerWin => options[j],
+                                    Winner.FirstPlayerWin => "Lose",
+                                    Winner.SecondPlayerWin => "Win",
                                     _ => "Draw"
                                 };
                             }
@@ -133,17 +120,17 @@ namespace RockPaperScissors
                         table = new TableView()
                         {
                             X = 0,
-                            Y = 0,
+                            Y = Pos.Bottom(helpDialogLabel),
                             Width = Dim.Fill(),
                             Height = Dim.Fill(),
                         };
                         table.Table = dataTable;
 
+                        dialog.Add(helpDialogLabel);
                         dialog.Add(table);
 
                         var ok = new Button(3, 14, "Ok");
                         ok.Clicked += () => { Application.RequestStop(); };
-                        //ok.IsDefault = true;
                         ok.Y = Pos.Bottom(table);
 
                         dialog.Add(ok);
@@ -157,7 +144,7 @@ namespace RockPaperScissors
                 }
             }
             key.Text = Convert.ToHexString(crypto.Key);
-            computerMoveText.Text = "Computer move is:" + options[computerMove];
+            computerMoveText.Text = "Computer move is: " + options[computerMove];
 
             winner.Text = winnerText;
             btnLogin.IsDefault = false;
@@ -179,7 +166,7 @@ public void Run(string[] _options)
             // Create input components and labels
             usernameLabel = new Label()
             {
-                Text = "Enter your choise:",
+                Text = "Select your choise: ",
                 Y = Pos.Bottom(HMAC)
             };
 
