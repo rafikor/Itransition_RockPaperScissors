@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
-namespace RockPaperScissors
+namespace RockPaperScissors.UI
 {
     public abstract class RockPaperScissorsBaseUI
     {

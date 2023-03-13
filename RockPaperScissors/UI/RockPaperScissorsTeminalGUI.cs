@@ -1,5 +1,4 @@
 ﻿using NStack;
-using RockPaperScissors;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
-namespace RockPaperScissors
+namespace RockPaperScissors.UI
 {
     public class RockPaperScissorsTeminalGUI : RockPaperScissorsBaseUI
     {

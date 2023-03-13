@@ -1,6 +1,5 @@
 ﻿using Core.Measurement;
 using NStack;
-using RockPaperScissors;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +10,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
-namespace RockPaperScissors
+namespace RockPaperScissors.UI
 {
     public class RockPaperScissorsDefaultUI : RockPaperScissorsBaseUI
     {
@@ -22,7 +21,7 @@ namespace RockPaperScissors
             Console.WriteLine(selectUserString);
             for (int move = 0; move < gameProcessor.options.Length; move++)
             {
-                Console.WriteLine($"{move+1} - {gameProcessor.options[move]}");
+                Console.WriteLine($"{move + 1} - {gameProcessor.options[move]}");
             }
             Console.WriteLine("0 - exit");
             Console.WriteLine(helpChoiseString + " - help");

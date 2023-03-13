@@ -1,4 +1,4 @@
-﻿using RockPaperScissors;
+﻿using RockPaperScissors.UI;
 using System.Security.Cryptography;
 
 namespace RockPaperScissors
